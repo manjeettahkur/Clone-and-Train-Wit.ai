@@ -1,5 +1,6 @@
 import wit
 import requests
+import json
 
 class WitBot:
     def __init__(self,token):
@@ -12,13 +13,11 @@ class WitBot:
         headers['Content-Type'] = 'application/json'
         
         data = {}
-        datap['name']  = name
+        data['name']  = name
         data['lang'] = lang
         data['private'] = private
 
-        response  = requests.post('curl', headers=headers, data=data)
-
-        return response
+        return requests.post('https://api.wit.ai/apps?v=20170307', headers=headers, data=json.dumps(data))
     
 
 class TrainWitBot:
@@ -33,12 +32,9 @@ class TrainWitBot:
         data = {}
         data['text'] = text
         data['entities']= entities
-        data = list(data)
-        response = requests.post('curl', headers=headers, data=data)
-        if response['sent']:
-            print 'Added to the bot'
-            return True
-        else:
-            print 'Failed to add to the bot'
-            return False
+        ary = []
+        ary.append(data)
+        print ary
+        response = requests.post('https://api.wit.ai/apps?v=20170307', headers=headers, data=json.dumps(ary))
+        return response
         
